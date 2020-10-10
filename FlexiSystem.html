@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+    <title>Felxi System</title>
+    <link rel='stylesheet' type="text/css" href='/stylesheets/flexiStyle.css'>
+	<script  type="text/javascript" src="./javascripts/jquery-3.4.1.js"></script>
+	<script  type="text/javascript" src="./javascripts/three.js"></script>
+	<script  type="text/javascript" src="./javascripts/SceneUtils.js"></script>
+	<script  type="text/javascript" src="./javascripts/orbitcontrols.js"></script>
+
+	<script  type="text/javascript" src="./javascripts/lib/projector.js"></script>
+  	<script  type="text/javascript" src="./javascripts/lib/canvasrenderer.js"></script>
+  	<script  type="text/javascript" src="./javascripts/src/csg.js"></script>
+  	<script  type="text/javascript" src="./javascripts/src/threecsg.js"></script>
+  	<script  type="text/javascript" src="./javascripts/src/openjscad.js"></script>
+  	<script  type="text/javascript" src="./javascripts/src/formats.js"></script>
+
+
+	<script  type="module" src="./javascripts/flexisystem.js"></script>
+	
+<script> 
+		var gProcessor=null;
+
+		// Show all exceptions to the user:
+		OpenJsCad.AlertUserOfUncaughtExceptions();
+
+		function onload(){
+			gProcessor = new OpenJsCad.Processor(document.getElementById("viewer"));
+
+			
+
+			document.getElementById("refreshBtn").addEventListener("click" , function (){
+			updateSolid();
+			console.log("refreshed!");
+		});
+
+		}
+
+		function updateSolid(){
+			gProcessor.setJsCad(document.getElementById('code').value);
+		}
+
+		function getExample(name) {
+			var el = document.getElementById('code');
+			$.get('./examples/' + name, function(data) {
+		    el.value = data;
+		    updateSolid();
+		});
+
+		
+}
+
+	</script>
+ </head>
+
+
+  <body onload="onload()">
+	
+    <h1>Felxi System <button id="tutorialTrigger"> Tutorials Here! </button></h1>
+	
+	
+	
+<div class="mainWrapper">
+		<!-- Slideshow container -->
+	<div id= "tutorialDivision" class="slideshow-container"></div>
+        <section class="mainPage">
+            <section class="editor " id="editor">
+                <span class="wrapper">
+                    <div style="clear: both;"></div>
+
+                    <div id="alerts" style="display: none;"></div>
+                    
+
+
+
+
+
+                    <article class="mainCanvas" style = "float:left;">
+
+                        <p class="canvas-loading" style="font-size: 36px; font-weight: bold; color: #de9756; text-align: center; position: absolute; top: 0; left: 0; width: 100%; line-height: 525px; z-index: 998; text-shadow: 2px 2px 40px rgba(0, 0, 0, 0.8); display: none;"><span style="padding: 20px; background: #000; background: rgba(0, 0, 0, 0.7); border-radius: 12px;">Loading…</span></p>
+                        <p class="canvas-failed" style="font-size: 16px; font-weight: bold; color: #de9756; text-align: center; position: absolute; top: 0; left: 0; width: 100%; line-height: 525px; z-index: 998; text-shadow: 2px 2px 40px rgba(0, 0, 0, 0.8); display: none;"><span style="padding: 20px; background: #000; background: rgba(0, 0, 0, 0.7); border-radius: 12px;">Sorry, we weren't able to find that image.</span></p>
+
+                        <p class="done-2" style="font-size: 20px; font-weight: bold; color: #de9756; text-align: center; position: absolute; top: 0; left: 0; width: 100%; line-height: 525px; z-index: 998; text-shadow: 2px 2px 40px rgba(0, 0, 0, 0.8); display: none;"><span style="padding: 25px; background: #000; background: rgba(0, 0, 0, 0.8); border-radius: 12px; cursor: pointer;">Build your own!</span></p>
+
+
+                        <canvas id="cookiesketcharea" height="525" width="650" style="cursor: default;">
+                            <p>Sorry, your browser is currently unsupported. Please use one of the
+                                supported browsers listed below.</p>
+                            <p>Supported browsers: <a href="https://www.google.com/chrome">Google Chrome</a>, <a href="http://www.opera.com/">Opera</a>, <a href="http://www.mozilla.com/">Firefox</a>, <a href="http://www.apple.com/safari">Safari</a>, and <a href="http://windows.microsoft.com/en-us/internet-explorer/products/ie/home">Internet Explorer 9</a>.</p>
+                        </canvas>
+                        <canvas id="tracelayer" height="525" width="650"></canvas>
+
+                        <span class="tips topOverlay" id="toptipspane">
+                            <span class="tiptext" style="position: relative; z-index: 1;"></span>
+                        <span class="tips topOverlay" style="float: right;">
+                            </span>
+                        </span>
+						 <span class="tools bottomOverlay"> &#8592;------------------------------------ plot scale: 15cm --------------------------------------&#8594; </span>
+                        <span class="tools bottomOverlay">
+
+                            <a href="#" class="tool" id="penbutton" ><span class="icon pen">&nbsp;</span><span class="legend">Drawing by mouse click</span></a>
+                            <!--
+      					<a href="#" class="tool insertMode" id="insertMode" title="Insert Points" onclick="if(deleteAnchorMode) {toggleDeleteMode();} insertModeToggle(); return false;"><span class="icon insertModeIcon add">&nbsp;</span><span class="legend">Insert</span></a>
+      					<a href="" class="tool delete" id="deletebutton" title="Delete points (d)" onclick="if(insertMode) {insertModeToggle();} toggleDeleteMode(); return false;"><span class="icon delete">&nbsp;</span><span class="legend">Delete</span></a>
+      					-->
+                            <a href="#editor" class="tool magicWand" id = "uploadButton">Upload an image</a>
+
+
+                            <a href="#" class="tool magicWand" id="tracebtn" title="Automatically trace shape in pictures" ><span class="icon magicWand">&nbsp;</span><span class="legend">ShapeTracing</span></a>
+							
+							<a href="#" class="tool" id="jointModBtn" title="Toggle Joint Mode" ><span class="icon">&nbsp;</span><span class="legend" id="jointModTxt">Switch Joint/Edit Mod</span></a>
+
+							<a href="#" class="tool" id="jointAddBtn" title="Add a new joint" style="display: none;">Add a new joint</a>
+
+							<a href="#" class="tool" id="clockwiseBtn" title="Rotate Joint Template clockwise"style="width: 35px ; text-align: center;  color: yellow; display: none;" >&#8635;</a>
+							
+							<a href="#" class="tool" id="clockwiseAntiBtn" title="Rotate Joint Template Anti-clockwise"style="width: 35px ; text-align: center;  color: yellow;display: none;" >&#8634;</a>
+
+							<a href="#" class="tool" id="lengthRPlus" title="Increase the template's length on R side"style="width: 35px ; text-align: center;  color: yellow;display: none;" >R+ </a>
+							<a href="#" class="tool" id="lengthRMinus" title="Decrease the template's length on R side"style="width: 35px ; text-align: color: yellow;display: none;" >R- </a>
+							<a href="#" class="tool" id="lengthLPlus" title="Increase the template's length on L side"style="width: 35px ; text-align: center; color: yellow;display: none;" >L+ </a>
+							<a href="#" class="tool" id="lengthLMinus" title="Decrease the template's length on L side"style="width: 35px ; text-align: center; color: yellow;display: none;" >L- </a>
+
+                            <div id="slider"></div>
+
+                            <a href="#" class="tool" id="insertMode" title="Insert Points" onclick="if(deleteAnchorMode) {toggleDeleteMode();} insertModeToggle(); return false;" style="display: none;"> Toggle insert mod </a>
+                            <a href="" class="tool" id="deletebutton" title="Delete points (d)" onclick="if(insertMode) {insertModeToggle();} toggleDeleteMode(); return false;" style="display: none;"> Toggle delete mod </a>
+							<button id = "refreshBtn" style="float:right ; width: 60px"> Update </button>
+                        </span>
+                    </article>
+
+<aside>
+
+                        <article class="secondaryCanvas">
+                            <div id="loadingframe" style="visibility: hidden;">
+                                <img src="/images/ajax-loader.gif"><!-- @MJ: UGLINESS alert! the spinner doesn't play nice with the background must generate a new one according to background color -->
+                            </div>
+
+                            <!-- 
+                            <form id="downloadForm" action="/download" method="post">
+                                <input type="hidden" name="type" value="obj">
+                                <input type="hidden" name="points" value="[[341,122,203,136,1],[144,220,89,377,1],[259,397,402,397,1],[491,330,440,296.5,0],[389,263,365,192.5,0],[341,122,277.5,195.5,0]]">
+                                <input type="hidden" name="size" value="5.1">
+                                <input type="hidden" name="height" value="38.099999999999994">
+                                <input type="hidden" name="thickness" value="3">
+                            </form> -->
+                            <div class="viewer-max-y">
+                                <div id="viewer" width="800" height="600"  style=" background-color: black; ">
+                                    
+                            </div>
+
+                        </article>
+
+                        
+
+                    </aside>
+
+                    <div id="trace-buttons" style="">trace Here!
+                        <input type="file" id="traceimage"  style="display:none;">
+					
+                        <!-- <button class="btn" id="traceimage-remove" style="display:none" onclick="clearTraceImage();">Remove Image</button> -->
+                    </div>
+                </span>
+            </section>
+
+        </section>
+
+    </div>
+	<br>
+	<textarea id="code" ></textarea>
+  </body>
+
+</html>
