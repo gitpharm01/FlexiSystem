@@ -1,24 +1,23 @@
 body {
-            background-color: gray;
+            background-color: BurlyWood;
         }
 
-        .editor {
-            background-image: linear-gradient(top, rgba(0, 0, 0, 0.4) 0, rgba(0, 0, 0, 0) 12px);
-            padding: 0;
+        .editor2D {
+            background-image: linear-gradient(top, rgba(0, 0, 0,0) 0, rgba(0, 0, 0,  0.4) 12px);
             text-align: center;
             padding: 30px 20px 90px 20px;
         }
 
-        .editor.alone {
+        .editor2D.alone {
             padding: 80px 20px 90px 20px;
         }
 
-        .editor .wrapper {
+        .editor2D .wrapper {
             width: 100%;
             max-width: 950px;
         }
 
-        .editor h2 {
+        .editor2D h2 {
             font-size: 47px;
             margin: 10px 0 14px 0;
             text-shadow: 0px 1px 0 rgba(255, 255, 255, 0.5);
@@ -36,40 +35,40 @@ body {
             line-height: 1.4;
         }
 
-        .editor .mainCanvas,
-        .editor .secondaryCanvas,
-        .editor #advancedoptionframe {
+        .editor2D .mainCanvas,
+        .editor2D .secondaryCanvas,
+        .editor2D #advancedoptionframe {
             border-radius: 5px;
 
             box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5) inset, -1px -1px 0px rgba(255, 255, 255, 0.6) inset;
             position: relative;
         }
 
-        .editor .mainCanvas {
+        .editor2D .mainCanvas {
             height: 635px;
             width: 650px;
             background: rgba(0, 0, 0, 0.6);
             display: inline-block;
         }
 
-        .editor .mainCanvas canvas {
+        .editor2D .mainCanvas canvas {
             position: absolute;
             top: 37px
         }
 
-        .editor aside {
+        .editor2D aside {
             float: left;
             width: 35%
         }
 
-        .editor .secondaryCanvas {
+        .editor2D .secondaryCanvas {
             width: 100%;
             height: 360px;
             background: rgba(0, 0, 0, 0.6);
             display: inline-block
         }
 
-        .editor .secondaryCanvas .topOverlay {
+        .editor2D .secondaryCanvas .topOverlay {
             text-align: center
         }
 
@@ -80,8 +79,8 @@ body {
             visibility: hidden;
         }
 
-        .editor .topOverlay,
-        .editor .bottomOverlay {
+        .editor2D .topOverlay,
+        .editor2D .bottomOverlay {
             display: block;
             position: absolute;
             background: rgba(0, 0, 0, 0.2);
@@ -96,7 +95,7 @@ body {
             font-family: 'Helvetica Neue'Arial, sans-serif;
         }
 
-        .editor .topOverlay {
+        .editor2D .topOverlay {
             border-radius: 5px 5px 0 0;
             top: 1px;
             padding: 4px 12px;
@@ -104,7 +103,7 @@ body {
             line-height: 1.8
         }
 
-        .editor .bottomOverlay {
+        .editor2D .bottomOverlay {
             border-radius: 0 0 5px 5px;
             bottom: 1px;
             padding: 0;
@@ -119,10 +118,10 @@ body {
 		}
 
 
-        .editor .tools .tool,
-        .editor .tools .tool:active,
-        .editor .tools .tool:link,
-        .editor .tools .tool:hover {
+        .editor2D .tools .tool,
+        .editor2D .tools .tool:active,
+        .editor2D .tools .tool:link,
+        .editor2D .tools .tool:hover {
             top: 1px;
             bottom: 1px;
             width: 70px;
@@ -139,35 +138,35 @@ body {
         }
 
 
-        .editor .tools .tool:last-of-type {
+        .editor2D .tools .tool:last-of-type {
             box-shadow: 1px 0px 0px rgba(255, 255, 255, 0.25)
         }
 
-        .editor .tools .tool:first-of-type {
+        .editor2D .tools .tool:first-of-type {
             border-left: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .editor .tools .tool:hover {
+        .editor2D .tools .tool:hover {
             background-color: rgba(255, 255, 255, 0.2);
             text-decoration: none
         }
 
-        .editor .tools .tool:active,
-        .editor .tools .tool.active {
+        .editor2D .tools .tool:active,
+        .editor2D .tools .tool.active {
             background-color: rgba(0, 0, 0, 0.2);
             background-image: linear-gradient(bottom, rgba(255, 255, 255, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%);
             color: #29ABE2;
         }
 
-        .editor .tools .tool.active .icon {
+        .editor2D .tools .tool.active .icon {
             background-position-y: -311px;
         }
 
-        .editor .tools .tool.active .legend {
+        .editor2D .tools .tool.active .legend {
             color: #29CCE2;
         }
 
-        .editor .tools .legend {
+        .editor2D .tools .legend {
             left: 0px;
             right: 0px;
             display: block;
@@ -207,7 +206,7 @@ body {
             text-decoration: none;
         }
 
-        #cookiesketcharea,
+        #sketcharea,
         #tracelayer {
             top: 10;
             left: 0;
@@ -218,15 +217,15 @@ body {
             /*z-index:100;*/
         }
 
-        #cookiesketcharea {
+        #sketcharea {
             z-index: 1;
         }
 
-        .editor .tools .tool.active .legend {
+        .editor2D .tools .tool.active .legend {
             color: #29CCE2;
         }
 
-        .editor .tools .legend {
+        .editor2D .tools .legend {
             left: 0px;
             right: 0px;
             display: block;
@@ -243,7 +242,7 @@ body {
             background: rgba(0, 0, 0, 0.6);
         }
 
-        /*Editor mode CSS settings*/
+        /*editor2D mode CSS settings*/
         .editBtn {
             background-color: rgba(20, 43, 224, 0.61);
             border: none;
@@ -260,62 +259,9 @@ body {
             font-weight: bold
         }
 
-        /*For the model advance option drop down*/
-        /* Dropdown Button */
-        .dropbtn {
-            background-color: rgba(52, 152, 219, 0.57);
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* Dropdown button on hover & focus */
-        .dropbtn:hover,
-        .dropbtn:focus {
-            background-color: rgba(41, 128, 185, 0.57);
-        }
-
-        /* The container <div> - needed to position the dropdown content */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Dropdown Content (Hidden by Default) */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: rgba(241, 241, 241, 0.3);
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        /* Links inside the dropdown */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Change color of dropdown links on hover */
-        .dropdown-content a:hover {
-            background-color: #ddd
-        }
-
-        /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-        .show {
-            display: block;
-        }
+       
 
         /* Tutorial slide show CSS settings */
-        {
-            box-sizing: border-box
-        }
-
         /* Slideshow container */
         .slideshow-container {
             display: none; /* Hidden by default */
@@ -341,42 +287,6 @@ body {
 		}
 
 
-
-        /* Next & previous buttons */
-        .prev,
-        .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            margin-top: -22px;
-            padding: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
-            user-select: none;
-        }
-
-        /* Position the "next button" to the right */
-        .prev {
-            left: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        /* Position the "next button" to the right */
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        /* On hover, add a black background color with a little bit see-through */
-        .prev:hover,
-        .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
         /* Caption text */
         .text {
             color: #f2f2f2;
@@ -397,48 +307,11 @@ body {
             top: 0;
         }
 
-        /* The dots/bullets/indicators */
-        .dot {
-            cursor: pointer;
-            height: 15px;
-            width: 15px;
-            margin: 0 2px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            transition: background-color 0.6s ease;
-        }
 
         .active,
         .dot:hover {
             background-color: #717171;
         }
 
-        /* Fading animation */
-        .fade {
-            -webkit-animation-name: fade;
-            -webkit-animation-duration: 1.5s;
-            animation-name: fade;
-            animation-duration: 1.5s;
-        }
-
-        @-webkit-keyframes fade {
-            from {
-                opacity: .4
-            }
-
-            to {
-                opacity: 1
-            }
-        }
-
-        @keyframes fade {
-            from {
-                opacity: .4
-            }
-
-            to {
-                opacity: 1
-            }
-        }
+        
 
