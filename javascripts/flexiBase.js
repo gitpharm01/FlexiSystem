@@ -162,30 +162,23 @@ var shiftDepressed = 0;
 //Function to detect tutorial element is active or not
 function checkTutorialMod(){
 	if(document.getElementById("tutorialDivision").style.display=="block"){
-		document.getElementById("cookiesketcharea").disabled = true;
+		document.getElementById("sketcharea").disabled = true;
 		return true;
 	}else {
-		document.getElementById("cookiesketcharea").disabled = false;
+		document.getElementById("sketcharea").disabled = false;
 		return false
 	}
 }
 
 function loadInitializer() {
-// set info from loaded cast
 	refresh();
-	$("#new_cast").submit(function(e) {
-		_gaq.push(['_trackEvent', 'cookiecaster', 'cast_saved']);
-    });
-    $(".download-this").submit(function(e) {
-		_gaq.push(['_trackEvent', 'cookiecaster', 'cast_downloaded']);
-	});
 }
 window.onresize = function (a) {
     setOffset()
 };
 //Set up the html5 2d canvas 
 function setupCanvas() {
-    mainCanvas = document.getElementById("cookiesketcharea");
+    mainCanvas = document.getElementById("sketcharea");
     if (!mainCanvas || !mainCanvas.getContext) {
         return
     }
@@ -758,7 +751,7 @@ function stopEditing() {
 
 //Set up the value of global variable "offset"
 function setOffset() {
-    offset = $("#cookiesketcharea").offset();
+    offset = $("#sketcharea").offset();
     offset.left = Math.round(offset.left);
     offset.top = Math.round(offset.top)
 }

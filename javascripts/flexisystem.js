@@ -49,7 +49,7 @@ $(document).ready(function () {
     //make trace buttons visible
     $("#trace-buttons").show();
     $("#tracebtn").css("visibility", "visible");
-    $("#cookiesketcharea").mouseenter(function () {
+    $("#sketcharea").mouseenter(function () {
 		overCanvas = 1
       
     });
