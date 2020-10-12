@@ -1,4 +1,4 @@
-A prototype system to create 3D models.
+A prototype system to create flexi style 3D models.
 
 To use the system, please go to https://gitpharm01.github.io/FlexiSystem/  
 Remember to go through the tutorials if you never used it before. (the pictures in the tutorial may take a second to load)
