@@ -873,7 +873,7 @@ function refreshWithMouseover(b, a) {
     refresh()
 }
 //Draw the shape in magic trace mode and pen mode
-export function refresh() {
+function refresh() {
 	console.log("refresh called");
     mainCanvas.width = mainCanvas.width;
     //If in magic trace mode
