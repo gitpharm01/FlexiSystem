@@ -99,15 +99,15 @@
       					<a href="#" class="tool insertMode" id="insertMode" title="Insert Points" onclick="if(deleteAnchorMode) {toggleDeleteMode();} insertModeToggle(); return false;"><span class="icon insertModeIcon add">&nbsp;</span><span class="legend">Insert</span></a>
       					<a href="" class="tool delete" id="deletebutton" title="Delete points (d)" onclick="if(insertMode) {insertModeToggle();} toggleDeleteMode(); return false;"><span class="icon delete">&nbsp;</span><span class="legend">Delete</span></a>
       					-->
-                            <a href="#editor2D" class="tool magicWand" id = "uploadButton">Upload an image</a>
+                            <a href="#editor2D" class="tool" id = "uploadButton">Upload an image</a>
 
 
-                            <a href="#" class="tool magicWand" id="tracebtn" title="Automatically trace shape in pictures" ><span class="icon magicWand">&nbsp;</span><span class="legend">ShapeTracing</span></a>
+                            <a href="#" class="tool" id="tracebtn" title="Automatically trace shape in pictures" ><span class="icon magicWand">&nbsp;</span><span class="legend">ShapeTracing</span></a>
 							
 							<a href="#" class="tool" id="jointModBtn" title="Toggle Joint Mode" ><span class="icon">&nbsp;</span><span class="legend" id="jointModTxt">Switch Joint/Edit Mod</span></a>
 
 							<a href="#" class="tool" id="jointAddBtn" title="Add a new joint" style="display: none;">Add a new joint</a>
-
+							<a href="#" class="tool" id="jointDeleteBtn" title="Delete the active joint" style="display: none;">Delete joint</a>
 							<a href="#" class="tool" id="clockwiseBtn" title="Rotate Joint Template clockwise"style="width: 35px ; text-align: center;  color: yellow; display: none;" >&#8635;</a>
 							
 							<a href="#" class="tool" id="clockwiseAntiBtn" title="Rotate Joint Template Anti-clockwise"style="width: 35px ; text-align: center;  color: yellow;display: none;" >&#8634;</a>
@@ -153,7 +153,7 @@
 
     </div>
 	<br>
-	<textarea id="code" ></textarea>
+	<textarea id="code" style= "display:none;" ></textarea>
   </body>
 
 </html>
