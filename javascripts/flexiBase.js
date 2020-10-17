@@ -155,6 +155,30 @@ function addNewJoint(){
 	refresh();
 	update3DScript();
 }
+
+function deleteJoint(){
+	if(!jointMod){
+		console.log("function available only in jointMod!!");
+		return	
+	}
+	if(allPoints.length ==0){
+		alert("The shape is not done yet!");
+		return
+	}
+	//Inactivate all other existing templates
+	if(templates.length > 0){ 
+		templates.splice(activeTemplateNum,1);
+		activeTemplateNum= 0;
+		if(templates[activeTemplateNum]){
+			templates[activeTemplateNum].isActive = 1;
+		}
+		
+	}
+
+	refresh();
+	update3DScript();
+}
+
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Initialize the scene after the page is ready.
 var shiftDepressed = 0;
@@ -1470,6 +1494,7 @@ function toggleJointMode(){
 		jointMod = false;
 		
 		document.getElementById("jointAddBtn").style.display = "none";
+		document.getElementById("jointDeleteBtn").style.display = "none";
 		document.getElementById("clockwiseBtn").style.display = "none";
 		document.getElementById("clockwiseAntiBtn").style.display = "none";
 		document.getElementById("lengthLPlus").style.display = "none";
@@ -1477,6 +1502,10 @@ function toggleJointMode(){
 		document.getElementById("lengthRPlus").style.display = "none";
 		document.getElementById("lengthRMinus").style.display = "none";
 
+		//show shape-drawing related buttons
+		document.getElementById("penbutton").style.display = "inline";
+		document.getElementById("uploadButton").style.display = "inline";  
+		document.getElementById("tracebtn").style.display = "inline";
 
 		document.getElementById("jointModTxt").innerHTML = "Switch to Joint Mod";
 		console.log("toggled");
@@ -1490,6 +1519,7 @@ function toggleJointMode(){
 	}else {
 		jointMod = true;
 		document.getElementById("jointAddBtn").style.display = "inline";
+		document.getElementById("jointDeleteBtn").style.display = "inline";
 		document.getElementById("clockwiseBtn").style.display = "inline";
 		document.getElementById("clockwiseAntiBtn").style.display = "inline";
 		document.getElementById("lengthLPlus").style.display = "inline";
@@ -1497,6 +1527,10 @@ function toggleJointMode(){
 		document.getElementById("lengthRPlus").style.display = "inline";
 		document.getElementById("lengthRMinus").style.display = "inline";
 
+		//Hide shape-drawing related buttons
+		document.getElementById("penbutton").style.display = "none";
+		document.getElementById("uploadButton").style.display = "none";  
+		document.getElementById("tracebtn").style.display = "none";  
 		//Remove all EventListener	
 		mainCanvas.removeEventListener("mousedown", press, false);
     	mainCanvas.removeEventListener("mousemove", drag, false);
@@ -1930,4 +1964,4 @@ function resetTraceImageFUpload() {
     $("#traceimage").val("")
 };
 
-export {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, update3DScript, setOffset, isTemplatesEmpty, setTemplateRotation, setTemplateLengthRL}
+export {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint,deleteJoint, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, update3DScript, setOffset, isTemplatesEmpty, setTemplateRotation, setTemplateLengthRL}

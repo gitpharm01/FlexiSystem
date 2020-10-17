@@ -3,11 +3,9 @@
 */
 
 import {tutorialObj} from './slideTutorial.js'
-import {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, update3DScript, setOffset, isTemplatesEmpty, setTemplateRotation, setTemplateLengthRL} from './flexiBase.js'
+import {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint,deleteJoint, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, update3DScript, setOffset, isTemplatesEmpty, setTemplateRotation, setTemplateLengthRL} from './flexiBase.js'
 
 //Global variables(objects and data)
-var mainCanvas, context;
-var traceCanvas, traceContext;
 var overCanvas = 1;
 
 //Tutorial slide show object
@@ -19,14 +17,6 @@ $.ajaxSetup({
     beforeSend: function (a) {
         a.setRequestHeader("X-CSRF-Token", $('meta[name="csrf-token"]').attr("content"))
     }
-});
-//Jquery function to fade out the loading screen
-$(document).ready(function () {
-    $(".canvas-loading").on("fadedone", function () {
-        $(this).fadeToggle("slow", function () {
-            $(this).trigger("fadedone")
-        })
-    })
 });
 
 window.onresize = function (a) {
@@ -113,6 +103,10 @@ $(document).ready(function () {
 	
 	document.getElementById("jointAddBtn").addEventListener("click", function () {
 		addNewJoint(); 
+    });
+
+	document.getElementById("jointDeleteBtn").addEventListener("click", function () {
+		deleteJoint(); 
     });
 
 	document.getElementById("clockwiseBtn").addEventListener("click", function () {
