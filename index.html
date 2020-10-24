@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-	<meta charset="UTF-8">
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta charset="UTF-8" >
     <title>Felxi System</title>
     <link rel='stylesheet' type="text/css" href='flexiStyle.css'>
 	<script  type="text/javascript" src="./javascripts/jquery-3.4.1.js"></script>
@@ -91,7 +92,7 @@
                         <span class="tips topOverlay" style="float: right;">
                             </span>
                         </span>
-						 <span class="tools bottomOverlay"> &#8592;------------------------------------ plot scale: 15cm --------------------------------------&#8594; </span>
+						 <span class="tools bottomOverlay"> &#8592;-------------------------------------- plot scale: 15cm ----------------------------------------&#8594; </span>
                         <span class="tools bottomOverlay">
 
                             <a href="#" class="tool" id="penbutton" ><span class="icon pen">&nbsp;</span><span class="legend">Drawing by mouse click</span></a>
@@ -106,11 +107,16 @@
 							
 							<a href="#" class="tool" id="jointModBtn" title="Toggle Joint Mode" ><span class="icon">&nbsp;</span><span class="legend" id="jointModTxt">Switch Joint/Edit Mod</span></a>
 
+							<a href="#" class="tool" id="accModBtn" title="Toggle Accessory Mode" ><span class="icon">&nbsp;</span><span class="legend" id="accModTxt">Accessory mode: off</span></a>
+
+							<a href="#" class="tool" id="accAddBtn" title="Add a new accessory" style="display: none;">New accessory</a>
+							<a href="#" class="tool" id="accDeleteBtn" title="Delete the active accessory" style="display: none;">Delete accessory</a>
+
 							<a href="#" class="tool" id="jointAddBtn" title="Add a new joint" style="display: none;">Add a new joint</a>
 							<a href="#" class="tool" id="jointDeleteBtn" title="Delete the active joint" style="display: none;">Delete joint</a>
-							<a href="#" class="tool" id="clockwiseBtn" title="Rotate Joint Template clockwise"style="width: 35px ; text-align: center;  color: yellow; display: none;" >&#8635;</a>
+							<a href="#" class="tool" id="clockwiseBtn" title="Rotate the template clockwise"style="width: 35px ; text-align: center;  color: yellow; display: none;" >&#8635;</a>
 							
-							<a href="#" class="tool" id="clockwiseAntiBtn" title="Rotate Joint Template Anti-clockwise"style="width: 35px ; text-align: center;  color: yellow;display: none;" >&#8634;</a>
+							<a href="#" class="tool" id="clockwiseAntiBtn" title="Rotate the template Anti-clockwise"style="width: 35px ; text-align: center;  color: yellow;display: none;" >&#8634;</a>
 
 							<a href="#" class="tool" id="lengthRPlus" title="Increase the template's length on R side"style="width: 35px ; text-align: center;  color: yellow;display: none;" >R+ </a>
 							<a href="#" class="tool" id="lengthRMinus" title="Decrease the template's length on R side"style="width: 35px ; text-align: color: yellow;display: none;" >R- </a>
@@ -143,8 +149,6 @@
 
                     <div id="trace-buttons" style="">trace Here!
                         <input type="file" id="traceimage"  style="display:none;">
-					
-                        <!-- <button class="btn" id="traceimage-remove" style="display:none" onclick="clearTraceImage();">Remove Image</button> -->
                     </div>
                 </span>
             </section>
@@ -152,7 +156,7 @@
         </section>
 
     </div>
-	<br>
+	<br><br>
 	<textarea id="code" style= "display:none;" ></textarea>
   </body>
 
