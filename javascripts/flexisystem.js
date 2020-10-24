@@ -3,11 +3,13 @@
 */
 
 import {tutorialObj} from './slideTutorial.js'
-import {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint,deleteJoint, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, update3DScript, setOffset, isTemplatesEmpty, setTemplateRotation, setTemplateLengthRL} from './flexiBase.js'
+
+import {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint,deleteJoint,addNewAccessory , deleteAccessory,  toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode,toggleAccessoryMode, update3DScript, setOffset, isTemplatesEmpty,isAccTemplatesEmpty, setTemplateRotation, setAccTemplateRotation,setTemplateLengthRL} from './flexiBase.js'
 
 //Global variables(objects and data)
 var overCanvas = 1;
-
+var accMode = false;
+var hingeMode = false;
 //Tutorial slide show object
 var tutorial;
 
@@ -99,6 +101,16 @@ $(document).ready(function () {
     });
     document.getElementById("jointModBtn").addEventListener("click", function () {
 		toggleJointMode(); 
+		if(hingeMode){
+			hingeMode = false		
+		}else {hingeMode = true}
+    });
+
+	document.getElementById("accModBtn").addEventListener("click", function () {
+		toggleAccessoryMode(); 
+		if(accMode){
+			accMode = false		
+		}else {accMode = true}
     });
 	
 	document.getElementById("jointAddBtn").addEventListener("click", function () {
@@ -109,16 +121,33 @@ $(document).ready(function () {
 		deleteJoint(); 
     });
 
+	document.getElementById("accAddBtn").addEventListener("click", function () {
+		addNewAccessory()
+    });
+
+	document.getElementById("accDeleteBtn").addEventListener("click", function () {
+		deleteAccessory() 
+    });
+
 	document.getElementById("clockwiseBtn").addEventListener("click", function () {
-		if(!isTemplatesEmpty()){
-			setTemplateRotation(-5)
+		if(!isTemplatesEmpty() || !isAccTemplatesEmpty()){
+			if(hingeMode){
+				setTemplateRotation(-5)
+			}else if(accMode){
+				setAccTemplateRotation(-5)
+			}
+			
 			update3DScript();
 		}
     });
 
     document.getElementById("clockwiseAntiBtn").addEventListener("click", function () {
-		if(!isTemplatesEmpty()){
-			setTemplateRotation(+5)
+		if(!isTemplatesEmpty() || !isAccTemplatesEmpty()){
+			if(hingeMode){
+				setTemplateRotation(5)
+			}else if(accMode){
+				setAccTemplateRotation(5)
+			}
 			update3DScript();
 		}
 	});

@@ -3,8 +3,7 @@
 */
 
 import {JointTemplate} from './hingeJoint.js'
-import {tutorialObj} from './slideTutorial.js'
-
+import {Ring} from './accessory.js'
 //Global variables(settings)
 const FIRST_POINT_TOLERANCE = 16;
 const FIRST_POINT_TOLERANCE_OFFSET = 8;
@@ -105,14 +104,22 @@ var anchorRemoved = 0;
 //Tutorial slide show object
 var tutorial;
 
-var jointMod = false;
+
 const CANVAS_SCALE_X = 650;
 var currentPlotScaleX = 150;
 var scaleRatio = currentPlotScaleX / CANVAS_SCALE_X;
 
+//Template mode variables
+var jointMod = false;
 var templates = [];
 var activeTemplateNum;
 var dragActiveTemplate = false;
+
+//Accessory mode variables
+var accessoryMod = false;
+var accTemplates = [];
+var activeAccTemplateNum;
+var dragActiveAccTemplate = false;
 
 //functions for external use to change the templates(templates will be packed in this module) such as in flexisystem.js 
 function isTemplatesEmpty(){
@@ -120,9 +127,17 @@ function isTemplatesEmpty(){
 		return true	
 	}else {return false}
 }
-
+function isAccTemplatesEmpty(){
+	if (accTemplates.length ==0) {
+		return true	
+	}else {return false}
+}
 function setTemplateRotation( angle ){
 	templates[activeTemplateNum].setRotation(angle);
+}
+
+function setAccTemplateRotation( angle ){
+	accTemplates[activeAccTemplateNum].setRotation(angle);
 }
 
 function setTemplateLengthRL(isR, distance ){
@@ -161,10 +176,6 @@ function deleteJoint(){
 		console.log("function available only in jointMod!!");
 		return	
 	}
-	if(allPoints.length ==0){
-		alert("The shape is not done yet!");
-		return
-	}
 	//Inactivate all other existing templates
 	if(templates.length > 0){ 
 		templates.splice(activeTemplateNum,1);
@@ -179,6 +190,41 @@ function deleteJoint(){
 	update3DScript();
 }
 
+function addNewAccessory(){
+	if(allPoints.length ==0){
+		alert("The shape is not done yet!");
+		return
+	}
+	var atemplate = new Ring([mainCanvas.width / 2, mainCanvas.height / 2]);
+	//Inactivate all other existing templates
+	if(accTemplates.length > 0){ 
+		for(var i=0;i< accTemplates.length;i++){
+			accTemplates[i].isActive = 0;
+		}	
+	}
+	accTemplates.push(atemplate);
+	activeAccTemplateNum = accTemplates.length -1;
+	refresh();
+	update3DScript();
+
+}
+
+function deleteAccessory(){
+	if(!accessoryMod){
+		console.log("function available only in jointMod!!");
+		return	
+	}
+	//Inactivate all other existing templates
+	if(accTemplates.length > 0){ 
+		accTemplates.splice(activeTemplateNum,1);
+		activeAccTemplateNum= 0;
+		if(accTemplates[activeAccTemplateNum]){
+			accTemplates[activeAccTemplateNum].isActive = 1;
+		}
+		
+	}
+	update3DScript();
+}
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Initialize the scene after the page is ready.
 var shiftDepressed = 0;
@@ -246,6 +292,38 @@ function setupCanvas() {
         $("meta[name=trace_image]").remove()
     }
 }
+function pressAcc(event){
+	//Skip all process if tutorial is shown
+	if(checkTutorialMod()){
+		return	
+	}
+	//reletive mouse click position at (x,y)
+    var x = event.pageX - offset.left;
+    var y = event.pageY - offset.top;
+
+	if (accessoryMod && accTemplates.length >0 ) {
+		//If the active accessory template is hit, start the dragging process
+		if(checkIfNearPoint(x, y, accTemplates[activeAccTemplateNum].coordinates[0], accTemplates[activeAccTemplateNum].coordinates[1])){
+			dragActiveAccTemplate = true;
+		}else {
+			dragActiveAccTemplate = false;
+		}
+		//Enter loop for checking possible hit on any inactive templates
+		for(var i=0; i< accTemplates.length; i++){
+			if (i == activeAccTemplateNum){
+				continue	
+			}
+			if( checkIfNearPoint(x, y, accTemplates[i].coordinates[0], accTemplates[i].coordinates[1]) ){
+				//Deactivate the current active template
+				accTemplates[activeAccTemplateNum].isActive = false;
+				//Set the next active template
+				activeAccTemplateNum = i;
+				accTemplates[i].isActive = true;
+			}
+		}
+	}
+}
+
 function pressJoint(event){
 	//Skip all process if tutorial is shown
 	if(checkTutorialMod()){
@@ -273,11 +351,8 @@ function pressJoint(event){
 				//Set the next active template
 				activeTemplateNum = i;
 				templates[i].isActive = true;
-				
 			}
 		}
-		
-
 	}
 }
 //function for mouse 'click'
@@ -395,6 +470,30 @@ function press(j) {
         }
     }
 }
+//accessory mod version of Mouse up
+function releaseAcc(event){
+	//Skip all process if tutorial is shown
+	if(checkTutorialMod()){
+		return	
+	}
+	var x = event.pageX - offset.left;
+    var y = event.pageY - offset.top;
+	if( allPoints.length==0){
+		alert("No existing shape!");
+		return	
+	}
+
+	if(accTemplates.length ==0){
+		return	
+	}
+	//Update the accessory and Turn off the dragging
+	if(dragActiveAccTemplate){
+		accTemplates[activeAccTemplateNum].setCoordinates(x,y);
+		dragActiveAccTemplate = false;	
+	}
+	update3DScript();
+}
+
 //joint mod version of Mouse up
 function releaseJoint(event){
 	//Skip all process if tutorial is shown
@@ -411,12 +510,11 @@ function releaseJoint(event){
 	if(templates.length ==0){
 		return	
 	}
+	//Turn off the dragging
 	if(dragActiveTemplate){
 		templates[activeTemplateNum].setCoordinates(x,y);
 		dragActiveTemplate = false;	
 	}
-	
-	refresh();
 	update3DScript();
 }
 //function for mouse up (c,b)
@@ -530,12 +628,23 @@ function release(d) {
 }
 var countDragEventMSIE;
 
+function dragAcc(event){
+	var b = event.pageX - offset.left;
+    var a = event.pageY - offset.top;
+	//If it's in accessory Mod and one Template is clicked, start the dragging process and change the coordinate of the active one
+	if (dragActiveAccTemplate){
+		//console.log("activeTemplateNum is"+activeTemplateNum);
+		accTemplates[activeAccTemplateNum].setCoordinates(b,a);
+	}
+	refresh();
+}
+
 function dragJoint(event){
 	var b = event.pageX - offset.left;
     var a = event.pageY - offset.top;
 	//If it's in joijntMod and one Template is clicked, start the dragging process and change the coordinate of the active one
 	if (dragActiveTemplate){
-		console.log("activeTemplateNum is"+activeTemplateNum);
+		//console.log("activeTemplateNum is"+activeTemplateNum);
 		templates[activeTemplateNum].setCoordinates(b,a);
 	}
 	refresh();
@@ -933,6 +1042,24 @@ function refresh() {
 
 			for (var i=0;i< templates.length ; i++) {
 				templates[i].drawTemplate(context);
+			}
+			return
+		}
+	}
+	if(accessoryMod){
+		if(allPoints.length>3){
+			//draw and fill the shape with color to work with
+			context.clearRect(0,0,context.width,context.height);
+			context.beginPath();
+			context.fillStyle = "#0011ff";
+			context.moveTo(finalArray[0][0],finalArray[0][1]);
+			for(var i = 1; i< finalArray.length; i++){
+				context.lineTo(finalArray[i][0],finalArray[i][1])
+			}
+			context.fill();
+
+			for (var i=0;i< accTemplates.length ; i++) {
+				accTemplates[i].drawAccessory(context);
 			}
 			return
 		}
@@ -1420,7 +1547,7 @@ function interpolatePointsForQuad(h, d, a, l, g, c) {
 }
 
 //Create or Update the script for creating 3d models in jscad environment
-//In order to show the result of script, user must trigger updateSolid() which is defined in flexisystem.ejs
+//In order to show the result of script, user must trigger updateSolid() which is defined in index.html
 function update3DScript() {
 	refresh();
 	function array2DToScaledStr(array){
@@ -1455,33 +1582,40 @@ function update3DScript() {
 	//Iterate through the templates array, get its values to create hingeTemplate shpaes according to their lengthL and lengthR,
 	//extrud them into 3D geometry.relocate and rotate them according to coordinates and rotation
 	if(templates.length > 0){
-		console.log("making hinges!!");
-    	for(var i=0; i<templates.length; i++){
+		   	for(var i=0; i<templates.length; i++){
 			hingeTemplateScript += "var hingeShape =CAG.fromPoints(" + array2DToStr(templates[i].hingePoints) + ");";
 			hingeTemplateScript += "var hingeTemplate = hingeShape.extrude({offset: [0,0,20] });";
 
 			hingeTemplateScript += "hingeTemplate.rotateZ(" + templates[i].rotation + ");";
 			hingeTemplateScript += "csg = csg.subtract(hingeTemplate);";
-			hingeTemplateScript += "csg = csg.union(hingeJoint.rotateZ(" + (-1 * templates[i].rotation) + ").translate([" + (templates[i].coordinates[0] *scaleRatio )+ "," + (templates[i].coordinates[1]* scaleRatio) + "]) );" ;
+			hingeTemplateScript += "csg = csg.union(hingeJoint.rotateZ(" + (-1 * templates[i].rotation) + ").translate([" + (templates[i].coordinates[0] *scaleRatio )+ "," + (templates[i].coordinates[1]* scaleRatio) + ",0]) );" ;
 		}
 	}
-	var returnScript = "return csg }";
+
+	var accessoryScript ="";
+	if(accTemplates.length > 0){
+		for (var i=0; i<accTemplates.length; i++){
+			accessoryScript += "csg = csg.union(accessory.rotateZ("+(-1 * accTemplates[i].rotation) +").translate(["+ accTemplates[i].coordinates[0]* scaleRatio + "," + accTemplates[i].coordinates[1] * scaleRatio+ ",0]));";
+		
+		}
+	}
 
 	createFinalArray();
 
-	
-	//console.log(hingeTemplateScript);
-	//var finalString = cadScriptShapeA + str + cadScriptShapeB + hingeTemplateScript +  returnScript;
-	//document.getElementById("code").value = finalString;
 
 	fetch('./examples/flexi.jscad').then(response => response.text()).then((data) => {
 
 		var position1 = data.indexOf("); //finalpoints");
-		var temp = [data.slice(0, position1), array2DToScaledStr(finalArray), data.slice(position1)].join('');
+		var temp1 = [data.slice(0, position1), array2DToScaledStr(finalArray), data.slice(position1)].join('');
 
-		var position2 = temp.indexOf("//hingesHere");
-		var output = [temp.slice(0, position2), hingeTemplateScript, temp.slice(position2)].join('');
+		var position2 = temp1.indexOf("//hingesHere");
+		var temp2 = [temp1.slice(0, position2), hingeTemplateScript, temp1.slice(position2)].join('');
+
+		var position3 = temp2.indexOf("//AccessoryHere");
+		var output = [temp2.slice(0, position3), accessoryScript, temp2.slice(position3)].join('');
+		console.log(output);
     	document.getElementById("code").value =  output;
+		
     })
 	
 }
@@ -1489,7 +1623,7 @@ function update3DScript() {
 //Switch between the shape editing mode(draw by mouse or magicTrace) and joint editing mode(add flexy joints)
 function toggleJointMode(){
 	magicTrace = false;
-	
+	console.log("joint toggled!")
 	if(jointMod){
 		jointMod = false;
 		
@@ -1506,9 +1640,8 @@ function toggleJointMode(){
 		document.getElementById("penbutton").style.display = "inline";
 		document.getElementById("uploadButton").style.display = "inline";  
 		document.getElementById("tracebtn").style.display = "inline";
-
 		document.getElementById("jointModTxt").innerHTML = "Switch to Joint Mod";
-		console.log("toggled");
+		document.getElementById("accModBtn").style.display = "inline";
 		//Remove special mouse press method and restore normal methods
 		mainCanvas.removeEventListener("mousedown", pressJoint, false);
 		mainCanvas.removeEventListener("mousemove", dragJoint, false);
@@ -1527,10 +1660,11 @@ function toggleJointMode(){
 		document.getElementById("lengthRPlus").style.display = "inline";
 		document.getElementById("lengthRMinus").style.display = "inline";
 
-		//Hide shape-drawing related buttons
+		//Hide shape-drawing related buttons and other mods
 		document.getElementById("penbutton").style.display = "none";
 		document.getElementById("uploadButton").style.display = "none";  
 		document.getElementById("tracebtn").style.display = "none";  
+		document.getElementById("accModBtn").style.display = "none";
 		//Remove all EventListener	
 		mainCanvas.removeEventListener("mousedown", press, false);
     	mainCanvas.removeEventListener("mousemove", drag, false);
@@ -1550,7 +1684,63 @@ function toggleJointMode(){
 
 }
 
+function toggleAccessoryMode(){
+	if(jointMod){
+		return
+	}
+	magicTrace = false;
+	//Turn on the features of accessary mod
+	if(!accessoryMod){
+		accessoryMod= true;
+		
+		document.getElementById("accAddBtn").style.display = "inline";
+		document.getElementById("accDeleteBtn").style.display = "inline";
+		document.getElementById("clockwiseBtn").style.display = "inline";
+		document.getElementById("clockwiseAntiBtn").style.display = "inline";
+		//Hide shape-drawing related buttons and other mods
+		document.getElementById("penbutton").style.display = "none";
+		document.getElementById("uploadButton").style.display = "none";  
+		document.getElementById("tracebtn").style.display = "none";  
+		document.getElementById("jointModBtn").style.display = "none";
+		//Remove all EventListener	
+		mainCanvas.removeEventListener("mousedown", press, false);
+    	mainCanvas.removeEventListener("mousemove", drag, false);
+    	mainCanvas.removeEventListener("mouseup", release);
+    	mainCanvas.removeEventListener("mouseout", cancel, false);
+    	mainCanvas.removeEventListener("touchstart", press, false);
+    	mainCanvas.removeEventListener("touchmove", drag, false);
+    	mainCanvas.removeEventListener("touchend", release, false);
+    	mainCanvas.removeEventListener("touchcancel", cancel, false);
 
+		document.getElementById("accModTxt").innerHTML = "Accessory Mode:ON";
+		//Add special mousemove method for joint Mod
+		mainCanvas.addEventListener("mousedown", pressAcc, false);
+		mainCanvas.addEventListener("mousemove", dragAcc, false);
+		mainCanvas.addEventListener("mouseup", releaseAcc, false);
+		refresh();
+	}else{
+	//Turn off the features of accessary mod
+		accessoryMod= false;
+		document.getElementById("accAddBtn").style.display = "none";
+		document.getElementById("accDeleteBtn").style.display = "none";
+		document.getElementById("clockwiseBtn").style.display = "none";
+		document.getElementById("clockwiseAntiBtn").style.display = "none";
+		//Show shape-drawing related buttons and other mods
+		document.getElementById("penbutton").style.display = "inline";
+		document.getElementById("uploadButton").style.display = "inline";  
+		document.getElementById("tracebtn").style.display = "inline"; 
+ 		document.getElementById("jointModBtn").style.display = "inline";
+		document.getElementById("accModTxt").innerHTML = "Accessory Mode:OFF";
+
+		//Remove special mouse press method and restore normal methods
+		mainCanvas.removeEventListener("mousedown", pressAcc, false);
+		mainCanvas.removeEventListener("mousemove", dragAcc, false);
+		mainCanvas.removeEventListener("mouseup", releaseAcc, false);
+		addRelevantEventListeners();
+		refresh();
+
+	}
+}
 //control the delet mode in different situation(having sample image on canvas/ in trace mode, etc)
 function toggleDeleteMode() {
 
@@ -1964,4 +2154,4 @@ function resetTraceImageFUpload() {
     $("#traceimage").val("")
 };
 
-export {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint,deleteJoint, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, update3DScript, setOffset, isTemplatesEmpty, setTemplateRotation, setTemplateLengthRL}
+export {setupCanvas,loadInitializer, startOver, toggleDeleteMode, insertModeToggle, addNewJoint,deleteJoint,addNewAccessory , deleteAccessory, toggleTraceImage, loadTraceImage, resetTraceImageFUpload, toggleMagicTrace, toggleJointMode, toggleAccessoryMode, update3DScript, setOffset, isTemplatesEmpty,isAccTemplatesEmpty, setTemplateRotation, setAccTemplateRotation,setTemplateLengthRL}
